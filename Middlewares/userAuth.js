@@ -14,7 +14,6 @@ module.exports=async(req,res,next)=>{
         const decoded=jwt.verify(authToken,process.env.JWT_SECRETE_KEY)
         console.log(decoded,"++++++");
         const user=await userModel.findOne({_id:decoded.id})
-        console.log(user,"MIDDLE");
         if(!user){
             return res.json({message:"Unauthorized",loginFail:true,status:false})
         }
