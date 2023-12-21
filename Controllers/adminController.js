@@ -5,6 +5,7 @@ const maxAge = 3 * 24 * 60 * 60;
 const adminModel = require("../Model/adminModel");
 const userModel = require("../Model/userModel");
 const trainingModel=require("../Model/TrainingModel")
+const academicModel=require("../Model/academicModel")
 require("dotenv").config();
 
 const createToken = (id) => {
@@ -97,4 +98,25 @@ try{
   console.log(error)
   res.json({message:"Internal server error in add training details",status:false})
 }
+}
+
+module.exports.addacademic=async(req,res,next)=>{
+  const {videoName,videoDescription,videoLink}=req.body
+  try{
+    const videoExist=await academicModel.findOne({videoLink:videoLink})
+  if(videoExist){
+    return res.json({message:"Video already exists",status:false})
+  }
+    const newAcademicDetails=new academicModel({
+      videoName:videoName,
+      videoDescription:videoDescription,
+      videoLink:videoLink
+    })
+    await newAcademicDetails.save()
+    return res.json({message:"Academic Details submitted successfully",status:true})
+
+  }catch(error){
+console.log(error)
+res.json({message:"Internal server in adding academic details",status:false})
+  }
 }
