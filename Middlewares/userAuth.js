@@ -12,10 +12,15 @@ module.exports=async(req,res,next)=>{
             })
         }
         const decoded=jwt.verify(authToken,process.env.JWT_SECRETE_KEY)
-        console.log(decoded,"++++++");
+
+
         const user=await userModel.findOne({_id:decoded.id})
+        const blockedUser=user.blockStatus
         if(!user){
             return res.json({message:"Unauthorized",loginFail:true,status:false})
+        }
+        if(blockedUser){
+            return res.json({message:"Temporary blocked", loginFail:true,status:false})
         }
         req.user=user
         next()

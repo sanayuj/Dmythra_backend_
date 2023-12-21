@@ -13,6 +13,7 @@ const createToken = (id) => {
 
 module.exports.signup = async (req, res, next) => {
   const { email, password, username } = req.body;
+  console.log(req.body, "SIGNUP VALUES");
   try {
     const emailExist = await userModel.findOne({ email: email });
     if (emailExist) {
@@ -22,7 +23,6 @@ module.exports.signup = async (req, res, next) => {
       userName: username,
       email: email,
       password: password,
-      verified: true,
     });
     const userDetails = await newUser.save();
     const token = createToken(userModel._id);
@@ -38,41 +38,43 @@ module.exports.signup = async (req, res, next) => {
 };
 
 module.exports.login = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { emailId, loginPassword } = req.body;
+console.log(req.body);
   try {
-    const existTrue = await userModel.findOne({ email });
-    if (existTrue) {
-      const auth = await bcrypt.compare(password, existTrue.password);
-      if (auth) {
-        const token = createToken(existTrue._id);
-        return res.json({
-          message: "Successfully logged in",
-          status: true,
-          userDetails: existTrue,
+    const user = await userModel.findOne({email: emailId });
+console.log(user,"&&&&&!!!!!");
+    if (user) {
+      const passwordMatch = await bcrypt.compare(loginPassword, user.password);
+console.log(passwordMatch,"MATTCH!!!");
+      if (passwordMatch) {
+        const token = createToken(user._id);
+        return res.status(200).json({
+          user,
+          message: "Authentication successful",
+          success: true,
           token,
         });
       } else {
-        return res.json({ message: "Incorrect password", status: false });
+        return res.json({ message: "Incorrect password", success: false });
       }
     } else {
-      return res.json({ message: "Account not found", status: false });
+      return res.json({ message: "User not found", success: false });
     }
+  } catch (error) {
+    console.error(error, "%%%%ERRRROR");
+    return res.json({ message: "Internal server error", success: false });
+  }
+};
+
+module.exports.userHeader = async (req, res, next) => {
+  try {
+    const userDetails = req.user;
+    return res.json({ status: true, userDetails: userDetails });
   } catch (error) {
     console.log(error);
     return res.json({
-      message: "Internal server error in the login page",
+      message: "Internal server error in useHeader",
       status: false,
     });
   }
 };
-
-
-module.exports.userHeader=async(req,res,next)=>{
-  try{
-    const userDetails=req.user
-    return res.json({status:true,userDetails:userDetails})
-  }catch(error){
-    console.log(error)
-    return res.json({message:"Internal server error in useHeader",status:false})
-  }
-}
