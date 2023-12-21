@@ -13,7 +13,6 @@ const createToken = (id) => {
 
 module.exports.signup = async (req, res, next) => {
   const { email, password, username } = req.body;
-  console.log(req.body, "SIGNUP VALUES");
   try {
     const emailExist = await userModel.findOne({ email: email });
     if (emailExist) {
@@ -42,10 +41,8 @@ module.exports.login = async (req, res, next) => {
 console.log(req.body);
   try {
     const user = await userModel.findOne({email: emailId });
-console.log(user,"&&&&&!!!!!");
     if (user) {
       const passwordMatch = await bcrypt.compare(loginPassword, user.password);
-console.log(passwordMatch,"MATTCH!!!");
       if (passwordMatch) {
         const token = createToken(user._id);
         return res.status(200).json({
@@ -61,7 +58,6 @@ console.log(passwordMatch,"MATTCH!!!");
       return res.json({ message: "User not found", success: false });
     }
   } catch (error) {
-    console.error(error, "%%%%ERRRROR");
     return res.json({ message: "Internal server error", success: false });
   }
 };
@@ -78,3 +74,4 @@ module.exports.userHeader = async (req, res, next) => {
     });
   }
 };
+
