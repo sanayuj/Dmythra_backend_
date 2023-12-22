@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
     image: {
       type: Object,
     },
+    date: {
+      type: Date,
+      default: Date.now,
+    },
    
   });
   
