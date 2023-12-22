@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const maxAge = 3 * 24 * 60 * 60;
 const userModel = require("../Model/userModel");
+const announcementModel=require("../Model/announcementModel")
 require("dotenv").config();
 
 const createToken = (id) => {
@@ -75,3 +76,12 @@ module.exports.userHeader = async (req, res, next) => {
   }
 };
 
+module.exports.fetchAnnouncements=async(req,res,next)=>{
+  try{
+    const data=await announcementModel.find()
+    res.json({message:"announcement fetched",status:true,Announcement:data})
+  }catch(error){
+    console.log(error)
+    res.json({message:"Internal server error in fetch announcement",status:false})
+  }
+}
