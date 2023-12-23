@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const maxAge = 3 * 24 * 60 * 60;
 const userModel = require("../Model/userModel");
 const announcementModel=require("../Model/announcementModel")
+const trainingModel=require("../Model/TrainingModel")
 require("dotenv").config();
 
 const createToken = (id) => {
@@ -83,5 +84,15 @@ module.exports.fetchAnnouncements=async(req,res,next)=>{
   }catch(error){
     console.log(error)
     res.json({message:"Internal server error in fetch announcement",status:false})
+  }
+}
+
+module.exports.fetchTrainingDetails=async(req,res,next)=>{
+  try{
+     const trainingDetails=await trainingModel.find()
+    res.json({message:"Training class fetched",status:true,data:trainingDetails})
+  }catch(error){
+    console.log(error);
+    res.json({message:"Internal server error in fetch training class ",status:false})
   }
 }
