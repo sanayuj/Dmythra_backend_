@@ -114,6 +114,10 @@ module.exports.addtrainingDetails = async (req, res, next) => {
 module.exports.addacademic = async (req, res, next) => {
   const { videoName, videoDescription, videoLink } = req.body;
   try {
+    const extractVideoKey = (link) => {
+      const match = link.match(/[?&]v=([^?&]+)/);
+      return match ? match[1] : "";
+    };
     const videoExist = await academicModel.findOne({ videoLink: videoLink });
     if (videoExist) {
       return res.json({ message: "Video already exists", status: false });
@@ -122,6 +126,7 @@ module.exports.addacademic = async (req, res, next) => {
       videoName: videoName,
       videoDescription: videoDescription,
       videoLink: videoLink,
+      videoKey:extractVideoKey(videoLink)
     });
     await newAcademicDetails.save();
     return res.json({

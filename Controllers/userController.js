@@ -5,6 +5,7 @@ const maxAge = 3 * 24 * 60 * 60;
 const userModel = require("../Model/userModel");
 const announcementModel=require("../Model/announcementModel")
 const trainingModel=require("../Model/TrainingModel")
+const academicModel=require("../Model/academicModel")
 require("dotenv").config();
 
 const createToken = (id) => {
@@ -94,5 +95,16 @@ module.exports.fetchTrainingDetails=async(req,res,next)=>{
   }catch(error){
     console.log(error);
     res.json({message:"Internal server error in fetch training class ",status:false})
+  }
+}
+
+module.exports.fetchAcademicDetails=async(req,res,next)=>{
+  try{
+    const academicDetails=await academicModel.find()
+    res.json({message:"Academic class fetched",status:true,data:academicDetails})
+
+  }catch(error){
+    console.log(error);
+    res.json({message:"Internal server error in fetch academic details",status:false})
   }
 }
