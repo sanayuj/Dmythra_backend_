@@ -7,6 +7,7 @@ const announcementModel=require("../Model/announcementModel")
 const trainingModel=require("../Model/TrainingModel")
 const academicModel=require("../Model/academicModel")
 const donationModel=require("../Model/donationRequestModel")
+const userPostModel=require("../Model/postModel")
 const path = require("path");
 
 require("dotenv").config();
@@ -114,8 +115,6 @@ module.exports.fetchAcademicDetails=async(req,res,next)=>{
 
 module.exports.sendDonationReq = async (req, res, next) => {
   try {
-    console.log(req.body, "&&&&&====>");
-    console.log(req.file, "----");
 
     const extractImageUrl = (fullPath) => {
       const relativePath = path.relative("public/images", fullPath);
@@ -132,7 +131,7 @@ module.exports.sendDonationReq = async (req, res, next) => {
 
     await newDonationRequest.save();
     
-    res.json({ message: "Successfully submitted!", status: true });
+    res.json({ message: "Successfully submitted", status: true });
   } catch (error) {
     console.log(error);
     res.json({ message: "Internal server error in donation request", status: false });
@@ -142,9 +141,22 @@ module.exports.sendDonationReq = async (req, res, next) => {
 
   module.exports.postSkill=async(req,res,next)=>{
     try{
+      console.log(req.body,"BBBOODDDYY");
+      const extractImageUrl = (fullPath) => {
+        const relativePath = path.relative("public/images", fullPath);
+        const imageUrl = relativePath.replace(/\\/g, '/');
+        return imageUrl;
+      };
 
+      const newUserPosts = new userPostModel({
+        postCaption: req.body.caption,
+        imageUrl: extractImageUrl(req.file.path),
+        ownerId: req.body.userId,
+      });
+      await newUserPosts.save()
+       res.json({message:"Successfully submitted",status:true})
     }catch(error){
       console.log(error);
-      req.json({message:"Internal server error in post skill",status:false})
+      res.json({message:"Internal server error in post skill",status:false})
     }
   }

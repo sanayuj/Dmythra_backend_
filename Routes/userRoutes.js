@@ -13,7 +13,7 @@ const DonationRequests=createMulterInstance("Requests")
 router.post("/signup",signup)
 router.post("/login",login)
 router.post("/donationreq",userAuth,DonationRequests.single('image'),sendDonationReq)
-router.post("/postskill",userAuth,uploadPost.single('image'),postSkill)
+router.post("/postskill",userAuth,uploadPost.single('photo'),postSkill)
 
 //GET 
 router.get("/",userAuth,userHeader)
@@ -22,4 +22,3 @@ router.get("/fetchtrainingdetails",userAuth,fetchTrainingDetails)
 router.get("/fetechacademicdetails",userAuth,fetchAcademicDetails)
 module.exports = router;
 
-// userAuth,uploadProduct.single('image')
