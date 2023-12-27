@@ -7,6 +7,8 @@ const announcementModel=require("../Model/announcementModel")
 const trainingModel=require("../Model/TrainingModel")
 const academicModel=require("../Model/academicModel")
 const donationModel=require("../Model/donationRequestModel")
+const path = require("path");
+
 require("dotenv").config();
 
 const createToken = (id) => {
@@ -110,27 +112,33 @@ module.exports.fetchAcademicDetails=async(req,res,next)=>{
   }
 }
 
-module.exports.sendDonationReq=async(req,res,next)=>{
-  try{
-    console.log(req.body,"&&&&&====>");
-    console.log(req.fields);
-    let categoryImage = req.files.image[0].path.replace("public/", "");
-    console.log(categoryImage,"$$$$$$$$$$")
+module.exports.sendDonationReq = async (req, res, next) => {
+  try {
+    console.log(req.body, "&&&&&====>");
+    console.log(req.file, "----");
 
+    const extractImageUrl = (fullPath) => {
+      const relativePath = path.relative("public/images", fullPath);
+      const imageUrl = relativePath.replace(/\\/g, '/');
+      return imageUrl;
+    };
 
     const newDonationRequest = new donationModel({
       requestDescription: req.body.description,
-      imageUrl: categoryImage,
-      requestTitle:req.body.situation,
-      ownerId:req.body,userId
+      imageUrl: extractImageUrl(req.file.path),
+      requestTitle: req.body.situation,
+      ownerId: req.body.userId,
     });
-    await newDonationRequest.save()
+
+    await newDonationRequest.save();
     
-  }catch(error){
+    res.json({ message: "Successfully submitted!", status: true });
+  } catch (error) {
     console.log(error);
-    res.json({message:"Internal server in donation request",status:false})
+    res.json({ message: "Internal server error in donation request", status: false });
   }
-  }
+};
+
 
   module.exports.postSkill=async(req,res,next)=>{
     try{
