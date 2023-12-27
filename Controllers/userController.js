@@ -6,6 +6,7 @@ const userModel = require("../Model/userModel");
 const announcementModel=require("../Model/announcementModel")
 const trainingModel=require("../Model/TrainingModel")
 const academicModel=require("../Model/academicModel")
+const donationModel=require("../Model/donationRequestModel")
 require("dotenv").config();
 
 const createToken = (id) => {
@@ -108,3 +109,34 @@ module.exports.fetchAcademicDetails=async(req,res,next)=>{
     res.json({message:"Internal server error in fetch academic details",status:false})
   }
 }
+
+module.exports.sendDonationReq=async(req,res,next)=>{
+  try{
+    console.log(req.body,"&&&&&====>");
+    console.log(req.fields);
+    let categoryImage = req.files.image[0].path.replace("public/", "");
+    console.log(categoryImage,"$$$$$$$$$$")
+
+
+    const newDonationRequest = new donationModel({
+      requestDescription: req.body.description,
+      imageUrl: categoryImage,
+      requestTitle:req.body.situation,
+      ownerId:req.body,userId
+    });
+    await newDonationRequest.save()
+    
+  }catch(error){
+    console.log(error);
+    res.json({message:"Internal server in donation request",status:false})
+  }
+  }
+
+  module.exports.postSkill=async(req,res,next)=>{
+    try{
+
+    }catch(error){
+      console.log(error);
+      req.json({message:"Internal server error in post skill",status:false})
+    }
+  }
