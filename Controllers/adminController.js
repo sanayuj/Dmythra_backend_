@@ -204,3 +204,17 @@ module.exports.fetchPostDetails=async(req,res,next)=>{
     res.json({message:"Internal server error in fetch post details",status:false})
   }
 }
+
+module.exports.verifyDonation=async(req,res,next)=>{
+  const donationId=req.params.donationId
+  console.log(donationId,"&&&&&");
+  try{
+    // const verifyDonation=await donationModel.findOne({_id:new ObjectId(Id) })
+    // console.log(verifyDonation,"Data");
+    await donationModel.updateOne({ _id: donationId }, { $set: { Verified: true } });
+    res.json({message:"Verified Successfully",status:true})
+  }catch(error){
+    console.log(error);
+    res.json({message:"Internal server error in verify donation",status:false})
+  }
+}

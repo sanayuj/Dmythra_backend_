@@ -160,3 +160,14 @@ module.exports.sendDonationReq = async (req, res, next) => {
       res.json({message:"Internal server error in post skill",status:false})
     }
   }
+
+  module.exports.userApprovedDonation=async(req,res,next)=>{
+    try{
+      const userId=req.params.userId
+      const approvedDonation=await donationModel.find({ownerId:userId,Verified: true,})
+      return res.json({message:"fetch approved donation",status:true,data:approvedDonation})
+    }catch(error){
+      console.log(error);
+      res.json({message:"Internal server error in fetching approved donation",status:false})
+    }
+  }
