@@ -1,7 +1,7 @@
 
 
 const express=require("express");
-const { login, userDetails,blockuser, addtrainingDetails, addacademic, addAnnouncement } = require("../Controllers/adminController");
+const { login, userDetails,blockuser, addtrainingDetails, addacademic, addAnnouncement, fetchDonation, fetchPostDetails } = require("../Controllers/adminController");
 const router=express.Router()
 
 router.post('/login',login)
@@ -14,6 +14,8 @@ router.post('/addannouncement',addAnnouncement)
 //GET METHODS
 
 router.get("/userdetails",userDetails)
+router.get("/donatondetails",fetchDonation)
+router.get("/fetchuserpost",fetchPostDetails)
 
 
 module.exports = router;

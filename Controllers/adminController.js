@@ -7,6 +7,8 @@ const userModel = require("../Model/userModel");
 const trainingModel = require("../Model/TrainingModel");
 const academicModel = require("../Model/academicModel");
 const announcementModel = require("../Model/announcementModel");
+const donationModel = require("../Model/donationRequestModel");
+const postModel = require("../Model/postModel");
 require("dotenv").config();
 
 const createToken = (id) => {
@@ -95,7 +97,7 @@ module.exports.addtrainingDetails = async (req, res, next) => {
       videoName: videoName,
       videoDescription: videoDescription,
       videoLink: videoLink,
-      videoKey:extractVideoKey(videoLink)
+      videoKey: extractVideoKey(videoLink),
     });
     await trainingDetails.save();
     return res.json({
@@ -126,7 +128,7 @@ module.exports.addacademic = async (req, res, next) => {
       videoName: videoName,
       videoDescription: videoDescription,
       videoLink: videoLink,
-      videoKey:extractVideoKey(videoLink)
+      videoKey: extractVideoKey(videoLink),
     });
     await newAcademicDetails.save();
     return res.json({
@@ -146,7 +148,7 @@ module.exports.addAnnouncement = async (req, res, next) => {
   const { announcementTopic, announcementDescription } = req.body;
   try {
     const announcementExists = await announcementModel.findOne({
-      announcementTopic: announcementTopic
+      announcementTopic: announcementTopic,
     });
     if (announcementExists) {
       res.json({ message: "Announcement already exists", status: true });
@@ -160,7 +162,45 @@ module.exports.addAnnouncement = async (req, res, next) => {
     res.json({ message: "Announcement submit successfully", status: true });
   } catch (error) {
     console.log(error);
-    res.json({message:"Internal server error in add announcement",status:false})
+    res.json({
+      message: "Internal server error in add announcement",
+      status: false,
+    });
   }
 };
 
+module.exports.fetchDonation = async (req, res, next) => {
+  try {
+    const donationDetails = await donationModel.find({}).populate({
+      path: 'ownerId',
+      model: 'user',
+      select: 'username email' 
+    });
+    return res.json({
+      message: "Donation details fetched",
+      data: donationDetails,
+      status: true,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      message: "Internal server error in fetch documents",
+      status: false,
+    });
+  }
+};
+
+module.exports.fetchPostDetails=async(req,res,next)=>{
+  try{
+    const userPostDetails=await postModel.find({}).populate({
+      path: 'ownerId',
+      model: 'user',
+      select: 'userName email' 
+    });
+    res.json({message:"user post details fetched successfully",data:userPostDetails,status:true})
+
+  }catch(error){
+    console.log(error);
+    res.json({message:"Internal server error in fetch post details",status:false})
+  }
+}
