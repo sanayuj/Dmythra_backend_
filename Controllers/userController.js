@@ -45,9 +45,11 @@ module.exports.signup = async (req, res, next) => {
 
 module.exports.login = async (req, res, next) => {
   const { emailId, loginPassword } = req.body;
-  console.log(req.body);
   try {
     const user = await userModel.findOne({ email: emailId });
+    if(user.blockStatus){
+      return res.json({message:"Admin temporay blocked you!",success:false})
+    }
     if (user) {
       const passwordMatch = await bcrypt.compare(loginPassword, user.password);
       if (passwordMatch) {
