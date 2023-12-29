@@ -25,7 +25,12 @@ module.exports.login = async (req, res, next) => {
       const auth = await bcrypt.compare(password, admin.password);
       if (auth) {
         const token = createToken(admin._id);
-        res.json({ message: "Successfully logined",data:admin, status: true, token });
+        res.json({
+          message: "Successfully logined",
+          data: admin,
+          status: true,
+          token,
+        });
       } else {
         res.json({ message: "Invailed Password", status: false });
       }
@@ -172,9 +177,9 @@ module.exports.addAnnouncement = async (req, res, next) => {
 module.exports.fetchDonation = async (req, res, next) => {
   try {
     const donationDetails = await donationModel.find({}).populate({
-      path: 'ownerId',
-      model: 'user',
-      select: 'username email' 
+      path: "ownerId",
+      model: "user",
+      select: "username email",
     });
     return res.json({
       message: "Donation details fetched",
@@ -190,41 +195,56 @@ module.exports.fetchDonation = async (req, res, next) => {
   }
 };
 
-module.exports.fetchPostDetails=async(req,res,next)=>{
-  try{
-    const userPostDetails=await postModel.find({}).populate({
-      path: 'ownerId',
-      model: 'user',
-      select: 'userName email' 
+module.exports.fetchPostDetails = async (req, res, next) => {
+  try {
+    const userPostDetails = await postModel.find({}).populate({
+      path: "ownerId",
+      model: "user",
+      select: "userName email",
     });
-    res.json({message:"user post details fetched successfully",data:userPostDetails,status:true})
-
-  }catch(error){
+    res.json({
+      message: "user post details fetched successfully",
+      data: userPostDetails,
+      status: true,
+    });
+  } catch (error) {
     console.log(error);
-    res.json({message:"Internal server error in fetch post details",status:false})
+    res.json({
+      message: "Internal server error in fetch post details",
+      status: false,
+    });
   }
-}
+};
 
-module.exports.verifyDonation=async(req,res,next)=>{
-  const donationId=req.params.donationId
-  console.log(donationId,"&&&&&");
-  try{
+module.exports.verifyDonation = async (req, res, next) => {
+  const donationId = req.params.donationId;
+  console.log(donationId, "&&&&&");
+  try {
     // const verifyDonation=await donationModel.findOne({_id:new ObjectId(Id) })
     // console.log(verifyDonation,"Data");
-    await donationModel.updateOne({ _id: donationId }, { $set: { Verified: true } });
-    res.json({message:"Verified Successfully",status:true})
-  }catch(error){
+    await donationModel.updateOne(
+      { _id: donationId },
+      { $set: { Verified: true } }
+    );
+    res.json({ message: "Verified Successfully", status: true });
+  } catch (error) {
     console.log(error);
-    res.json({message:"Internal server error in verify donation",status:false})
+    res.json({
+      message: "Internal server error in verify donation",
+      status: false,
+    });
   }
-}
+};
 
-module.exports.adminHeader=async(req,res,next)=>{
-  try{
-const adminDetails=req.admin
-return res.json({status:true,adminDetails:adminDetails})
-  }catch(error){
+module.exports.adminHeader = async (req, res, next) => {
+  try {
+    const adminDetails = req.admin;
+    return res.json({ status: true, adminDetails: adminDetails });
+  } catch (error) {
     console.log(error);
-    res.json({message:"Internal server error in admin header",status:false})
+    res.json({
+      message: "Internal server error in admin header",
+      status: false,
+    });
   }
-}
+};

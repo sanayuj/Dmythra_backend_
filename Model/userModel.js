@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
     verified: {
       type: Boolean,
       default: false,
-    },
+    }, 
     blockStatus: {
       type: Boolean,
       default: false,

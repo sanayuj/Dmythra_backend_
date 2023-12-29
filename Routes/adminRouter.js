@@ -12,7 +12,7 @@ router.post('/addacademic',adminAuth,addacademic)
 router.post('/addannouncement',addAnnouncement)
 router.post('/verfiydonation/:donationId',adminAuth,verifyDonation)
 
-
+ 
 //GET METHODS
 
 router.get("/userdetails",adminAuth,userDetails)

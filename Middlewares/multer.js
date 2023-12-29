@@ -9,7 +9,7 @@
 //       "image/webp",
 //       "image/avif",
 //     ];
-  
+
 //     if (allowedMimeTypes.includes(file.mimetype)) {
 //       cb(null, true);
 //     } else {
@@ -19,14 +19,11 @@
 //       return cb(err, false);
 //     }
 //   };
-  
-
 
 // //image upload
 // const uploadImage = (path) => {
 //   try {
-    
- 
+
 //     console.log(path, "Multer image upload!!!!!!!");
 //     const storage = multer.diskStorage({
 //       destination: function (req, file, cb) {
@@ -37,36 +34,32 @@
 //         const originalname = path.parse(file.originalname);
 //         cb(null, `${originalname.name}_${Date.now()}${originalname.ext}`);
 //     },
-    
+
 //     });
 //     return multer({ storage: storage, fileFilter }).fields([{ name: 'image', maxCount: 1 }]);
 //   } catch (error) {
 //     console.log(error,"Multer error!!!");
 //   }
 //   };
-  
 
 // module.exports = { uploadImage };
 
-
-
-const multer = require('multer');
-const path = require('path')
-
+const multer = require("multer");
+const path = require("path");
 
 // Multer (file upload setup)
 //creating multer instance based on destination folder
 const createMulterInstance = (folderName) => {
-    const storage = multer.diskStorage({
-        destination: (req, file, cb) => {
-            cb(null,`public/images/${folderName}`);
-        },
-        filename: (req, file, cb) => {
-            const originalname = path.parse(file.originalname);
-            cb(null,`${originalname.name}_${Date.now()}${originalname.ext}`);
-        },
-    });
-    return multer({ storage: storage })
-}
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, `public/images/${folderName}`);
+    },
+    filename: (req, file, cb) => {
+      const originalname = path.parse(file.originalname);
+      cb(null, `${originalname.name}_${Date.now()}${originalname.ext}`);
+    },
+  });
+  return multer({ storage: storage });
+};
 
 module.exports = createMulterInstance;
