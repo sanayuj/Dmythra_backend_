@@ -1,7 +1,7 @@
 
 
 const express=require("express");
-const { login, userDetails,blockuser, addtrainingDetails, addacademic, addAnnouncement, fetchDonation, fetchPostDetails, verifyDonation } = require("../Controllers/adminController");
+const { login, userDetails,blockuser, addtrainingDetails, addacademic, addAnnouncement, fetchDonation, fetchPostDetails, verifyDonation, adminHeader } = require("../Controllers/adminController");
 const adminAuth = require("../Middlewares/adminAuth");
 const router=express.Router()
 
@@ -18,6 +18,6 @@ router.post('/verfiydonation/:donationId',adminAuth,verifyDonation)
 router.get("/userdetails",adminAuth,userDetails)
 router.get("/donatondetails",adminAuth,fetchDonation)
 router.get("/fetchuserpost",adminAuth,fetchPostDetails)
-
+router.get("/",adminAuth,adminHeader)
 
 module.exports = router;

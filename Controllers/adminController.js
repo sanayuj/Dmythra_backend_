@@ -25,7 +25,7 @@ module.exports.login = async (req, res, next) => {
       const auth = await bcrypt.compare(password, admin.password);
       if (auth) {
         const token = createToken(admin._id);
-        res.json({ message: "Successfully logined", status: true, token });
+        res.json({ message: "Successfully logined",data:admin, status: true, token });
       } else {
         res.json({ message: "Invailed Password", status: false });
       }
@@ -216,5 +216,15 @@ module.exports.verifyDonation=async(req,res,next)=>{
   }catch(error){
     console.log(error);
     res.json({message:"Internal server error in verify donation",status:false})
+  }
+}
+
+module.exports.adminHeader=async(req,res,next)=>{
+  try{
+const adminDetails=req.admin
+return res.json({status:true,adminDetails:adminDetails})
+  }catch(error){
+    console.log(error);
+    res.json({message:"Internal server error in admin header",status:false})
   }
 }
