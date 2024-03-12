@@ -11,7 +11,7 @@ const bodyParser = require("body-parser");
 //database connection
 dbConnection.dbConnect();
 //connection function
-app.use(cors());
+app.use(cors()); 
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
